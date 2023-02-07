@@ -1,26 +1,15 @@
+const HTTP = require("http");
+const FS = require("fs");
 
-
-
-
-
-
-
-const http = require("http");
-const fs = require("fs");
-
-
-http.createServer(function(request, response){
-   
-  fs.readFile("index.html", function(err, data){
+let http_server = HTTP.createServer(function(req, res){
+    FS.readFile("index.html", function(err, data){
     if (err){
       console.error(err);
       return;
-     }
-
-   response.writeHead(200, {"Content-Type":"text/html"});
-   response.write(data);
-
-   response.end();
- }); 
-
-}).listen(6969);
+    }
+    res.write(data);
+    
+    res.end();
+    });
+});
+http_server.listen(6969);
