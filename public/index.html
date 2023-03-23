@@ -8,6 +8,15 @@
 </head>
 <body>
 <h1>ENTI Survivors</h1>
+<form>
+<label for="dificultad">Difficulty</label>
+<select id="dificultad" name="dificultad">
+<option value="easy">easy</option>
+<option value="medium">medium</option>
+<option value="hard">hard</option>
+</select>
+<button type="submit">Start Game</button>
+</form>
 <script>
 
 const config = {
@@ -95,18 +104,17 @@ function crear ()
 
 					this.physics.add.existing(e, false);
 					enemies.push(e);
-					enemies[i].body.setCollideWorldBounds(true);
-				  this.physics.add.collider(player, enemies[i], function (player, enemy){
-           // reset();
-
-            player_hp--;
-            hp_text.text = lives.toString();
-        });
+					enemies[i].body.setCollideWorldBounds(true);	
 	}
-
 	this.physics.add.collider(player, enemies);
-  this.physics.add.collider(enemies);
-
+	this.physics.add.collider(enemies);
+  for (let i = 0; i < enemies_pos.length; i++){
+                        if (this.physics.collide(player ,enemies[i])){
+                               reset();
+                                                player_hp--;
+            hp_text.text = player_hp.toString();
+                        }
+	}
  	weapon = this.add.image(config.width/2+48, config.height/2, "weapon");
 
 	this.physics.add.existing(weapon, false);	
@@ -133,7 +141,8 @@ function crear ()
   
 	timer_text = this.add.text(3*config.width/4,25, 'time: 0', {fontSize:'400 64px Arial'});
 	score_text = this.add.text(16,16, '0', {fontSize:'400 64px Arial'});
-	hp_text = this.add.text(16,3*config.height/4, '0', {fontSize:'400 64px Arial'});
+	hp_text = this.add.text(16,3*config.height/4, '3', {fontSize:'400 64px Arial'});
+
 }
 
 let last_dir = "L";
@@ -189,7 +198,11 @@ function actualiza ()
 
 	for (let i = 0; i < enemies_pos.length; i++){
 			this.physics.moveToObject(enemies[i], player, 50);
-
+			/*if (this.physics.collide(player ,enemies[i])){
+				reset();
+						player_hp--;
+            hp_text.text = player_hp.toString();
+			}*/
 			if (this.physics.collide(weapon, enemies[i])){
 					enemies[i].visible = false;
 					this.physics.world.disable(enemies[i]);
